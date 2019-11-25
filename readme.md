@@ -39,9 +39,10 @@ You will need to set your lambda's trigger to be S3 ObjectCreated.
 
 ### Environment variables
 
-| Variable name | Description |
-| --------------|-------------|
-| BPM_CSRF_URL  | REST endpoint URL for requesting a new CSRF token |
-| BPM_EMAIL_URL | REST endpoint URL for creating a new task instance |
-| BPM_USER      | Username for accessing BPM |
-| BPM_PW        | Password for above |
+| Variable name     | Description |
+| ------------------|-------------|
+| BPM_CSRF_URL      | REST endpoint URL for requesting a new CSRF token |
+| BPM_EMAIL_URL     | REST endpoint URL for creating a new task instance |
+| BPM_USER          | Username for accessing BPM |
+| BPM_PW            | Password for above |
+| ATTACHMENT_BUCKET | S3 bucket name to store attachments in |
