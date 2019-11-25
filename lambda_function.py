@@ -121,5 +121,4 @@ def lambda_handler(event, context):
         "status": task_resp.status_code,
         "body": task_resp.text,
         "bpm_data": bpm_data,
-        "attachments": attachments,
     }
