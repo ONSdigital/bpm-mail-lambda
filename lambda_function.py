@@ -84,6 +84,7 @@ def lambda_handler(event, context):
                 "name": "email",
                 "data": {
                     "from": message.get("From"),
+                    "cc": message.get("Cc"),
                     "dateReceived": date_converted,
                     "subject": message.get("Subject"),
                     "body": email_content,
