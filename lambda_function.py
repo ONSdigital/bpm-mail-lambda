@@ -6,8 +6,9 @@ from uuid import uuid4
 from email import policy, message_from_bytes
 from os import getenv
 import boto3
-
-DEBUG = int(getenv("DEBUG", "0"))
+import logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
@@ -78,6 +79,7 @@ def lambda_handler(event, context):
                 "fileSizeBytes": len(file_content),
             }
         )
+    logger.info(f'### EMAIL ### From: {message.get("From")}, Subject: {message.get("Subject")}')
     bpm_data = {
         "input": [
             {
