@@ -1,3 +1,7 @@
 function.zip
 v-env/
 .vscode/
+__pycache__/
+.pytest_cache
+.terraform/
+.DS_Store
