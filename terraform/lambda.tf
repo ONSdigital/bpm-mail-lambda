@@ -22,6 +22,11 @@ resource "aws_iam_role_policy_attachment" "add_cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "add_s3" {
+  role       = aws_iam_role.email_lambda.name
+  policy_arn = aws_iam_policy.email-lambda-s3-policy.arn
+}
+
 resource "aws_lambda_function" "email" {
     filename = "../function.zip"
     runtime = "python3.8"

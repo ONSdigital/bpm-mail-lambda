@@ -4,7 +4,7 @@ provider "aws" {
 
 locals  {
     prefix = "${var.app}-${var.stage}"
-    attachments_bucket = "${local.prefix}-attachments-in.${var.domain}"
+    attachments_bucket = "${local.prefix}-attachments.${var.domain}"
     emails_bucket = "${local.prefix}-emails.${var.domain}"
 }
 
