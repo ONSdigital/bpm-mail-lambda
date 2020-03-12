@@ -5,16 +5,16 @@ resource "aws_s3_bucket" "emails" {
         "Version": "2012-10-17",
         "Statement": [
             {
-                "Sid": "AllowEmailLambda",
+                "Sid": "AllowSESPuts",
                 "Effect": "Allow",
                 "Principal": {
-                    "Service": "lambda.amazonaws.com"
+                    "Service": "ses.amazonaws.com"
                 },
-                "Action": "s3:GetObject",
+                "Action": "s3:PutObject",
                 "Resource": "arn:aws:s3:::${local.emails_bucket}/*",
                 "Condition": {
                     "StringEquals": {
-                        "aws:SourceArn": "${aws_lambda_function.email.arn}"
+                        "aws:Referer": "${data.aws_caller_identity.current.account_id}"
                     }
                 }
             }
