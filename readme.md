@@ -13,7 +13,7 @@ python3 -m venv v-env
 source v-env/bin/activate
 pipenv install
 deactivate
-cd v-env/lib/python3.7/site-packages
+cd v-env/lib/$PYTHONDIR/site-packages
 zip -r9 $OLDPWD/function.zip .
 ```
 
@@ -25,7 +25,12 @@ zip -g function.zip lambda_function.py
 
 You will need to re-run this last step after every edit to the lambda that you wish to deploy. You can deploy this using the `aws` CLI tool, or the management console on the web.
 
-You will only need to re-create the zip file if you make changes to the modules.
+When (not if) you need to update the python dependencies, run `pipenv update` in the base directory, then freshen the deployment zip file with
+
+```sh
+cd ./v-env/lib/python3.7/site-packages/
+zip -fr ../../../../function.zip ./*
+```
 
 ## Configuration
 
