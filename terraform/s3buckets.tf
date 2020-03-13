@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "emails" {
     policy = <<-POLICY
     {
         "Version": "2012-10-17",
-        "Statement": [
+        "Statement": [%{ if var.stage == "dev" }
             {
                 "Sid": "AllowSESPuts",
                 "Effect": "Allow",
@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "emails" {
                     }
                 }
             }
-        ]
+        %{ endif }]
     }
 POLICY
 }
