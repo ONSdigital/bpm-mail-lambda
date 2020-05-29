@@ -9,8 +9,6 @@ set -euo pipefail
 : ${TF_VAR_BPM_USER}
 : ${TF_VAR_BPM_PW}
 : ${AWS_REGION}
-: ${BPM_USER}
-: ${BPM_PW}
 : ${AWS_REGION}
 : ${S3_NAME}
 : ${S3_KEY}
