@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: eu.gcr.io/ons-gcr-bpm/bpm-ci-tools-terraform
+    username: _json_key
+    password: ((gcp.service_account_json))
+
+inputs:
+  - name: bpm-mail-lambda
+  - name: role
+  - name: generated
+
+run:
+  path: bpm-mail-lambda/ci/tasks/terraform_apply.sh
