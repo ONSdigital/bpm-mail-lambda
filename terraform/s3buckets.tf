@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "emails" {
     policy = <<-POLICY
     {
         "Version": "2012-10-17",
-        "Statement": [%{ if var.stage == "dev" }
+        "Statement": [
             {
                 "Sid": "AllowSESPuts",
                 "Effect": "Allow",
@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "emails" {
                     }
                 }
             }
-        %{ endif }]
+        ]
     }
 POLICY
 }
@@ -42,7 +42,7 @@ POLICY
 }
 
 resource "aws_iam_policy" "email-lambda-s3-policy" {
-    name        = "${local.prefix}-email-s3-lambda"
+    name        = "${terraform.workspace}-email-s3-lambda"
     description = "Least privilege permissions for BPM Email ingress lambda"
 
     policy = <<POLICY
