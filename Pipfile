@@ -13,6 +13,7 @@ boto3 = "*"
 requests = "*"
 jsonschema = "*"
 bleach = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.7"
