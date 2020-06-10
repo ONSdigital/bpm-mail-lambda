@@ -18,7 +18,7 @@ sed "s/{{environment}}/${ENVIRONMENT}/" role.tf.tmpl > role.tf
 
 tfenv install
 terraform init
-terraform apply --auto-approve --var "environment=${ENVIRONMENT}" .
+terraform destroy --auto-approve --var "environment=${ENVIRONMENT}" .
 
 rm role.tf
 popd
