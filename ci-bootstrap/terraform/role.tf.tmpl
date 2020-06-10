@@ -6,17 +6,6 @@ provider "aws" {
 
 variable "environment" {}
 
-terraform {
-  backend "s3" {
-    # NB. The state bucket MUST already have been manually bootstrapped.
-    # See instructions in https://github.com/ONSdigital/bpm-ci/tree/master/bootstrap
-    # This only needs to be done once per environment set up
-    bucket = "{{environment}}.bpm.terraform.ons.digital"
-    key = "bootstrap/deploy/bpm-mail-lambda-role.tfstate"
-    region = "eu-west-2"
-  }
-}
-
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "deploy-mail-lambda" {
