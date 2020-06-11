@@ -5,8 +5,8 @@
 
 set -euo pipefail
 
-: ${WORKSPACE:="bpm"}
-: ${ENVIRONMENT:="sandbox"}
+: $WORKSPACE
+: $ENVIRONMENT
 : ${CONFIGURATION:="mail"}
 : ${AWS_REGION:="eu-west-2"}
 : ${HTTP_PROXY:="localhost:8118"}
