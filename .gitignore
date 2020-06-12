@@ -6,4 +6,5 @@ __pycache__/
 .terraform/
 .DS_Store
 *.tfvars
-.tfstate
+*.tfstate
+**/role.tf

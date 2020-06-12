@@ -4,9 +4,9 @@
 
 set -euo pipefail
 
-: ${WORKSPACE:="bpm"}
+: $WORKSPACE
+: $ENVIRONMENT
 : ${CONFIGURATION:="mail"}
-: ${ENVIRONMENT:="sandbox"}
 : ${HTTP_PROXY:="localhost:8118"}
 : ${TARGET:=gcp}
 : ${FLY:=fly -t ${TARGET}}
