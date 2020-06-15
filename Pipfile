@@ -8,6 +8,7 @@ moto = "*"
 pytest = "*"
 requests_mock = "*"
 boto3 = "*"
+flake8 = "*"
 
 [packages]
 requests = "*"
