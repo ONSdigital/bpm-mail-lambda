@@ -7,7 +7,7 @@ set -euo pipefail
 
 : ${WORKSPACE}
 : ${TERRAFORM_SOURCE}
-: $CONFIGURATION
+: ${CONFIGURATION}
 
 cd ${TERRAFORM_SOURCE}
 
