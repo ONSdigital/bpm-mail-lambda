@@ -12,10 +12,6 @@ variable "stage" {
     type = string
 }
 
-variable "configuration" {
-    type = string
-}
-
 variable "BPM_USER" {
     type = string
 }
