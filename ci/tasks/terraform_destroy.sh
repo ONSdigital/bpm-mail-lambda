@@ -3,8 +3,8 @@
 set -euo pipefail
 
 : ${WORKSPACE}
-: ${CONFIGURATION}
-: $STAGE
+: ${TF_VAR_configuration}
+: ${TF_VAR_stage}
 : ${AWS_REGION}
 : ${TF_VAR_BPM_USER}
 : ${TF_VAR_BPM_PW}

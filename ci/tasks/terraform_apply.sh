@@ -5,8 +5,8 @@
 set -euo pipefail
 
 : ${WORKSPACE}
-: ${CONFIGURATION}
-: $STAGE
+: ${TF_VAR_configuration}
+: ${TF_VAR_stage}
 : ${TERRAFORM_SOURCE}
 : ${TF_VAR_BPM_USER}
 : ${TF_VAR_BPM_PW}
