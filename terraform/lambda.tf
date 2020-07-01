@@ -1,5 +1,5 @@
 resource "aws_iam_role" "email_lambda" {
-  name = "${terraform.workspace}-${terraform.configuration}-lambda"
+  name = "${terraform.workspace}-((configuration))-lambda"
   assume_role_policy = <<-EOF
     {
         "Version": "2012-10-17",

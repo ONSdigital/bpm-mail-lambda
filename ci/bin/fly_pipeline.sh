@@ -30,6 +30,7 @@ ${FLY} set-pipeline \
     -v "workspace=${WORKSPACE}" \
     -v "aws_region=${AWS_REGION}" \
     -v "environment=${ENVIRONMENT}" \
+    -v "configuration=${CONFIGURATION}" \
     -v "branch=${BRANCH}" \
     ${EXTRA_OPTIONS}
 
