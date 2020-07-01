@@ -7,6 +7,7 @@ set -euo pipefail
 : $WORKSPACE
 : $ENVIRONMENT
 : $CONFIGURATION
+: $STAGE
 : ${HTTP_PROXY:="localhost:8118"}
 : ${TARGET:=gcp}
 : ${FLY:=fly -t ${TARGET}}

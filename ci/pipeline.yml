@@ -14,7 +14,8 @@ aws_params: &aws_params
 tf_params: &tf_params
   <<: *aws_params
   WORKSPACE: ((workspace))
-  CONFIGURATION: ((configuration))
+  TF_VAR_configuration: ((configuration))
+  TF_VAR_stage: ((stage))
   TERRAFORM_SOURCE: bpm-mail-lambda/terraform
   TF_VAR_BPM_USER: ((pricormaillambda.bpm_user))
   TF_VAR_BPM_PW: ((pricormaillambda.bpm_pw))
