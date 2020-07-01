@@ -1,17 +1,19 @@
 variable "app" {
     type = string
-    default = "bpm-mail"
-}
-
-#deployment stage
-variable "stage" {
-    type = string
-    default = "dev"
+    default = "bpm-emails"
 }
 
 variable "domain" {
     type = string
     default = "bpm.ons.digital"
+}
+
+variable "stage" {
+    type = string
+}
+
+variable "configuration" {
+    type = string
 }
 
 variable "BPM_USER" {
