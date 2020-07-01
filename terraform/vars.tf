@@ -1,6 +1,6 @@
 variable "app" {
     type = string
-    default = "bpm-emails"
+    default = "emails"
 }
 
 variable "domain" {
