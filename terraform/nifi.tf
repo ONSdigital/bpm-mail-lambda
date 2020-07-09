@@ -1,5 +1,5 @@
 resource "aws_iam_user" "nifi" {
-  name = "bpm_nifi_email"
+  name = "${local.prefix}-nifi"
 }
 
 resource "aws_iam_access_key" "nifi" {
