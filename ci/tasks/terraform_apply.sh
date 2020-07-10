@@ -5,10 +5,10 @@
 set -euo pipefail
 
 : ${WORKSPACE}
+: ${TF_VAR_stage}
 : ${TERRAFORM_SOURCE}
 : ${TF_VAR_BPM_USER}
 : ${TF_VAR_BPM_PW}
-: ${AWS_REGION}
 : ${AWS_REGION}
 : ${S3_NAME}
 : ${S3_KEY}

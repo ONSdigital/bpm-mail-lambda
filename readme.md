@@ -47,8 +47,6 @@ cd ./v-env/lib/python3.7/site-packages/
 zip -fr ../../../../function.zip ./*
 ```
 ​
-## Configuration
-​
 ### Runtime
 ​
 This lambda uses the Python 3.7 runtime.
@@ -59,12 +57,12 @@ You will need to set your lambda's trigger to be S3 ObjectCreated.
 ​
 ### Environment variables
 ​
-| Variable name     | Description |
-| ------------------|-------------|
-| BPM_CSRF_URL      | REST endpoint URL for requesting a new CSRF token |
+| Variable name     | Description                                        |
+| ----------------- | -------------------------------------------------- |
+| BPM_CSRF_URL      | REST endpoint URL for requesting a new CSRF token  |
 | BPM_EMAIL_URL     | REST endpoint URL for creating a new task instance |
-| BPM_USER          | Username for accessing BPM |
-| BPM_PW            | Password for above |
-| ATTACHMENT_BUCKET | S3 bucket name to store attachments in |
+| BPM_USER          | Username for accessing BPM                         |
+| BPM_PW            | Password for above                                 |
+| ATTACHMENT_BUCKET | S3 bucket name to store attachments in             |
 ​
 When terraforming, you will need to set environment variables `TF_VAR_BPM_USER` and `TF_VAR_BPM_PW` to the values you have created for your service account in BAW.
