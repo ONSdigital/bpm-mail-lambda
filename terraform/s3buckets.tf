@@ -42,8 +42,8 @@ POLICY
 }
 
 resource "aws_iam_policy" "email-lambda-s3-policy" {
-    name        = "${terraform.workspace}-emails-s3-lambda"
-    description = "Least privilege permissions for BPM Email ingress lambda"
+  name        = "${terraform.workspace}-emails-s3-lambda"
+  description = "Least privilege permissions for BPM Email ingress lambda"
 
   policy = <<POLICY
 {
