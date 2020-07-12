@@ -32,9 +32,12 @@ MANIFEST_SCHEMA = {
                     "sizeBytes": "string",
                     "body.mime.type": "string",
                 },
+                "required": ["filename", "mailpart", "orig.attach.name", "attach.file.type", "sizeBytes", "body.mime.type"]
             },
         },
     },
+    "additionalProperties": false,
+    "required": ["subject", "sent", "ccList", "from", "emailmimetype", "Attachments"]
 }
 
 CSRF_TOKEN = None
