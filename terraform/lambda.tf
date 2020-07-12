@@ -24,13 +24,14 @@ resource "aws_iam_role_policy_attachment" "add_s3" {
   policy_arn = aws_iam_policy.email-lambda-s3-policy.arn
 }
 resource "aws_lambda_function" "email" {
-  filename      = "../../generated/function.zip"
-  runtime       = "python3.8"
-  role          = aws_iam_role.email_lambda.arn
-  function_name = "${terraform.workspace}-ingest"
-  handler       = "lambda_function.lambda_handler"
-  description   = "BPM Prices Correspondence new instance email trigger"
-  timeout       = 30
+  filename         = "../../generated/function.zip"
+  source_code_hash = filebase64sha256("../../generated/function.zip")
+  runtime          = "python3.8"
+  role             = aws_iam_role.email_lambda.arn
+  function_name    = "${terraform.workspace}-ingest"
+  handler          = "lambda_function.lambda_handler"
+  description      = "BPM Prices Correspondence new instance email trigger"
+  timeout          = 30
   environment {
     variables = {
       ATTACHMENT_BUCKET = local.attachments_bucket
