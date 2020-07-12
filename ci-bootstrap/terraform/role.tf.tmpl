@@ -93,6 +93,10 @@ data "aws_iam_policy_document" "bpm-deploy-lambda-policy" {
                 "iam:DeletePolicy",
                 "iam:CreateRole",
                 "iam:CreateUser",
+                "iam:CreateAccessKey",
+                "iam:ListAccessKeys",
+                "iam:PutUserPolicy",
+                "iam:GetUserPolicy",
                 "iam:CreatePolicy",
                 "iam:AttachRolePolicy"
               ]
