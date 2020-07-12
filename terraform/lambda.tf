@@ -34,8 +34,8 @@ resource "aws_lambda_function" "email" {
   environment {
     variables = {
       ATTACHMENT_BUCKET = local.attachments_bucket
-      BPM_CSRF_URL      = "https://ons.bpm.ibmcloud.com/baw/${var.stage}/bpm/system/login"
-      BPM_EMAIL_URL     = "https://ons.bpm.ibmcloud.com/baw/${var.stage}/bpm/processes?model=Prices%20Correspondence&container=PRICOR"
+      BPM_CSRF_URL      = "https://ons-bawoc.bpm.ibmcloud.com/baw/${var.stage}/bpm/system/login"
+      BPM_EMAIL_URL     = "https://ons-bawoc.bpm.ibmcloud.com/baw/${var.stage}/bpm/processes?model=Prices%20Correspondence&container=PRICOR"
       BPM_USER          = var.BPM_USER
       BPM_PW            = var.BPM_PW
     }
@@ -52,6 +52,6 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = local.emails_bucket
   lambda_function {
     lambda_function_arn = aws_lambda_function.email.arn
-    events              = ["s3:ObjectCreated:*"]
+    events              = ["s3:ObjectCreated:manifest/*"]
   }
 }

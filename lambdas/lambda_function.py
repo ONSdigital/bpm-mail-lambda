@@ -78,6 +78,7 @@ def lambda_handler(event, context):
 
     manifest_txt = client.get_object(Bucket=bucket_name, Key=s3_key)
     LOGGER.info(f"### TIME ### Time to get manifest: {time() - timestamp}")
+    LOGGER.info(f"### MANIFEST ### Manifest is : {manifest_txt}")
     timestamp = time()
     if manifest_txt is None:
         raise Exception(

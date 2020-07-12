@@ -1,8 +1,8 @@
 {
-    "subject": "FW: test with two attachments",
+    "subject": "Test with one attachments",
     "sent": "Mon Jun 22 08:42:45 BST 2020",
-    "ccList": "",
-    "from": "andy.williams@ons.gov.uk",
+    "ccList": "phil.bambridge@ons.gov.uk",
+    "from": "bambrp.ons@gmail.com",
     "emailmimetype": "message/rfc822",
     "Attachments": [
         {
@@ -14,20 +14,12 @@
             "sizeBytes": ""
         },
         {
-            "filename": "b7fba774-a3f1-4d2e-b606-f1b5acdc0242-e9aaccd4-6de5-4e5e-bc2d-ed1acea6c46b-worddoctest.docx",
+            "filename": "b7fba774-a3f1-4d2e-b606-f1b5acdc0242-e9aaccd4-6de5-4e5e-bc2d-ed1acea6c46b-phil.jpg",
             "mailpart": "attachment",
-            "orig.attach.name": "worddoctest.docx",
+            "orig.attach.name": "phil.jpg",
             "body.mime.type": "",
-            "attach.file.type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "sizeBytes": "11905"
-        },
-        {
-            "filename": "b7fba774-a3f1-4d2e-b606-f1b5acdc0242-839e1e72-b757-4504-baab-af5da3c11daf-mailmani2.txt",
-            "mailpart": "attachment",
-            "orig.attach.name": "mailmani2.txt",
-            "body.mime.type": "",
-            "attach.file.type": "text/plain",
-            "sizeBytes": "387"
+            "attach.file.type": "image/jpeg",
+            "sizeBytes": "23931"
         }
     ]
 }
