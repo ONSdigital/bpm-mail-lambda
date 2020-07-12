@@ -22,21 +22,23 @@ MANIFEST_SCHEMA = {
         "emailmimetype": "string",
         "Attachments": {
             "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "filename": "string",
-                    "mailpart": "string",
-                    "orig.attach.name": "string",
-                    "attach.file.type": "string",
-                    "sizeBytes": "string",
-                    "body.mime.type": "string",
-                },
-                "required": ["filename", "mailpart", "orig.attach.name", "attach.file.type", "sizeBytes", "body.mime.type"]
-            },
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "filename": "string",
+                        "mailpart": "string",
+                        "orig.attach.name": "string",
+                        "attach.file.type": "string",
+                        "sizeBytes": "string",
+                        "body.mime.type": "string",
+                    },
+                    "required": ["filename", "mailpart", "orig.attach.name", "attach.file.type", "sizeBytes", "body.mime.type"]
+                }
+            ],
         },
     },
-    "additionalProperties": false,
+    "additionalProperties": False,
     "required": ["subject", "sent", "ccList", "from", "emailmimetype", "Attachments"]
 }
 
