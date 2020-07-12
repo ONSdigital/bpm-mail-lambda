@@ -52,6 +52,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = local.emails_bucket
   lambda_function {
     lambda_function_arn = aws_lambda_function.email.arn
-    events              = ["s3:ObjectCreated:manifest/*"]
+    events              = ["s3:ObjectCreated:*"]
+    filter_prefix       = "manifest/"
   }
 }
