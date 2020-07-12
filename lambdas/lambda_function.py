@@ -51,6 +51,7 @@ def check_token():
     global CSRF_TOKEN
     if CSRF_TOKEN is not None and CSRF_TOKEN.expiration < time():
         return CSRF_TOKEN
+    LOGGER.info(f"### CSRF ### Requesting new CSRF token")
     csrf_resp = requests.post(
         getenv("BPM_CSRF_URL"),
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
@@ -99,13 +100,13 @@ def lambda_handler(event, context):
 
     # We get:  Wed, 7 Oct 2015 12:34:56 -0700
     # We need: ISO-8601 format 'yyyy-MM-dd'T'HH:mm:ssz'
-    date_received = datetime.strptime(manifest.sent, r"%a, %d %b %Y %H:%M:%S %z")
+    date_received = datetime.strptime(manifest["sent"], r"%a, %d %b %Y %H:%M:%S %z")
     date_converted = date_received.strftime(r"%Y-%m-%dT%H:%M:%S%z")
 
     # Select the attachments object for the email body
-    body = [att for att in manifest.Attachments if att.mailpart == "body"][0]
+    body = [att for att in manifest["Attachments"] if att["mailpart"] == "body"][0]
     # Retrieve email body from S3 bucket
-    email_body = client.get_object(Bucket=bucket_name, Key="email/" + body.filename)
+    email_body = client.get_object(Bucket=bucket_name, Key="email/" + body["filename"])['Body'].read()
     email_content = bleach.clean(
         email_body,
         tags=[
@@ -131,7 +132,7 @@ def lambda_handler(event, context):
         f"### TIME ### Time to get email and sanitise html: {time() - timestamp}"
     )
     timestamp = time()
-    attachments = [att for att in manifest.Attachments if att.mailpart == "attachment"]
+    attachments = [att for att in manifest["Attachments"] if att["mailpart"] == "attachment"][0]
     req_attachments = []
     if attachments:
         bucket = getenv("ATTACHMENT_BUCKET")
@@ -139,10 +140,10 @@ def lambda_handler(event, context):
         for attachment in attachments:
             req_attachments.append(
                 {
-                    "url": f"https://s3.{region}.amazonaws.com/{bucket}/{attachment.filename}",
-                    "contentType": attachment.get("attach.file.type"),
-                    "originalFilename": attachment.get("orig.attach.name"),
-                    "fileSizeBytes": int(attachment.sizeBytes),
+                    "url": f"https://s3.{region}.amazonaws.com/{bucket}/{attachment['filename']}",
+                    "contentType": attachment["attach.file.type"],
+                    "originalFilename": attachment["orig.attach.name"],
+                    "fileSizeBytes": int(attachment["sizeBytes"]),
                 }
             )
 
@@ -153,11 +154,11 @@ def lambda_handler(event, context):
                 "name": "email",
                 "data": {
                     "from": manifest["from"],
-                    "cc": manifest.ccList,
+                    "cc": manifest["ccList"],
                     "dateReceived": date_converted,
-                    "subject": manifest.subject,
+                    "subject": manifest["subject"],
                     "body": email_content,
-                    "contentType": body.get("body.mime.type"),
+                    "contentType": body["body.mime.type"],
                     "attachments": req_attachments,
                 },
             }
