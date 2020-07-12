@@ -107,7 +107,7 @@ def lambda_handler(event, context):
 
     # We get:  Wed Oct 02 12:34:56 BST 2020
     # We need: ISO-8601 format 'yyyy-MM-dd'T'HH:mm:ssz'
-    date_received = datetime.strptime(manifest["sent"], r"%a %b %d %H:%M:%S %z %Y")
+    date_received = datetime.strptime(manifest["sent"], r"%a %b %d %H:%M:%S %Z %Y")
     date_converted = date_received.strftime(r"%Y-%m-%dT%H:%M:%S%z")
 
     # Select the attachments object for the email body
