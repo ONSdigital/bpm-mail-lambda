@@ -15,25 +15,26 @@ MANIFEST_SCHEMA = {
     "$schema": "http://json-schema.org/draft/2019-09/schema#",
     "type": "object",
     "properties": {
-        "subject": "string",
-        "sent": "string",
-        "ccList": "string",
-        "from": "string",
-        "emailmimetype": "string",
+        "subject": {"type": "string"},
+        "sent": {"type": "string"},
+        "ccList": {"type": "string"},
+        "from": {"type": "string"},
+        "emailmimetype": {"type": "string"},
         "Attachments": {
             "type": "array",
             "items": [
                 {
                     "type": "object",
                     "properties": {
-                        "filename": "string",
-                        "mailpart": "string",
-                        "orig.attach.name": "string",
-                        "attach.file.type": "string",
-                        "sizeBytes": "string",
-                        "body.mime.type": "string",
+                        "filename": {"type": "string"},
+                        "mailpart": {"type": "string"},
+                        "orig.attach.name": {"type": "string"},
+                        "attach.file.type": {"type": "string"},
+                        "sizeBytes": {"type": "string"},
+                        "body.mime.type": {"type": "string"},
                     },
-                    "required": ["filename", "mailpart", "orig.attach.name", "attach.file.type", "sizeBytes", "body.mime.type"]
+                    "required": ["filename", "mailpart", "orig.attach.name", "attach.file.type", "sizeBytes", "body.mime.type"],
+                    "additionalProperties": False
                 }
             ],
         },
