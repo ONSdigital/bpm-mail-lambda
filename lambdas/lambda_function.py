@@ -33,14 +33,21 @@ MANIFEST_SCHEMA = {
                         "sizeBytes": {"type": "string"},
                         "body.mime.type": {"type": "string"},
                     },
-                    "required": ["filename", "mailpart", "orig.attach.name", "attach.file.type", "sizeBytes", "body.mime.type"],
-                    "additionalProperties": False
+                    "required": [
+                        "filename",
+                        "mailpart",
+                        "orig.attach.name",
+                        "attach.file.type",
+                        "sizeBytes",
+                        "body.mime.type",
+                    ],
+                    "additionalProperties": False,
                 }
             ],
         },
     },
     "additionalProperties": False,
-    "required": ["subject", "sent", "ccList", "from", "emailmimetype", "Attachments"]
+    "required": ["subject", "sent", "ccList", "from", "emailmimetype", "Attachments"],
 }
 
 CSRF_TOKEN = None
@@ -83,7 +90,7 @@ def lambda_handler(event, context):
     s3_key = s3_event["object"]["key"]
     LOGGER.info(f"### S3 ### Bucket: {bucket_name}; Object key: {s3_key}")
 
-    manifest_txt = client.get_object(Bucket=bucket_name, Key=s3_key)['Body'].read()
+    manifest_txt = client.get_object(Bucket=bucket_name, Key=s3_key)["Body"].read()
     LOGGER.info(f"### TIME ### Time to retrieve manifest: {time() - timestamp}")
     LOGGER.info(f"### MANIFEST ### Manifest is : {manifest_txt}")
     timestamp = time()
@@ -106,7 +113,9 @@ def lambda_handler(event, context):
     # Select the attachments object for the email body
     body = [att for att in manifest["Attachments"] if att["mailpart"] == "body"][0]
     # Retrieve email body from S3 bucket
-    email_body = client.get_object(Bucket=bucket_name, Key="email/" + body["filename"])['Body'].read()
+    email_body = client.get_object(Bucket=bucket_name, Key="email/" + body["filename"])[
+        "Body"
+    ].read()
     email_content = bleach.clean(
         email_body,
         tags=[
@@ -132,7 +141,9 @@ def lambda_handler(event, context):
         f"### TIME ### Time to get email and sanitise html: {time() - timestamp}"
     )
     timestamp = time()
-    attachments = [att for att in manifest["Attachments"] if att["mailpart"] == "attachment"][0]
+    attachments = [
+        att for att in manifest["Attachments"] if att["mailpart"] == "attachment"
+    ][0]
     req_attachments = []
     if attachments:
         bucket = getenv("ATTACHMENT_BUCKET")
