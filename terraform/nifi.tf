@@ -3,12 +3,12 @@ resource "aws_iam_user" "nifi" {
 }
 
 resource "aws_iam_access_key" "nifi" {
-  user = "${aws_iam_user.lb.name}"
+  user = aws_iam_user.nifi.name
 }
 
 resource "aws_iam_user_policy" "nifi" {
   name = "bpm_nifi_store_email"
-  user = "${aws_iam_user.nifi.name}"
+  user = aws_iam_user.nifi.name
 
   policy = <<EOF
 {
