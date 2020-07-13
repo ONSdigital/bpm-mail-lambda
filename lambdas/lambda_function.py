@@ -182,7 +182,7 @@ def lambda_handler(event, context):
     CSRF_TOKEN = check_token()
     task_resp = requests.post(
         getenv("BPM_EMAIL_URL"),
-        headers={"BPMCSRFToken": CSRF_TOKEN.csrf_token},
+        headers={"BPMCSRFToken": CSRF_TOKEN["csrf_token"]},
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
         json=bpm_data,
     )
