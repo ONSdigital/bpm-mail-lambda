@@ -65,7 +65,7 @@ def check_token():
     csrf_resp = requests.post(
         getenv("BPM_CSRF_URL"),
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
-        json={"refresh_groups": True, "requested_lifetime": 7200},
+        json={"requested_lifetime": 7200},
     )
     if csrf_resp.status_code != 201:
         raise Exception(
