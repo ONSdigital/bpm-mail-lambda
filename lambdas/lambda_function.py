@@ -73,7 +73,7 @@ def check_token():
         )
     CSRF_TOKEN = csrf_resp.json()
     # Subtracting 30 seconds to allow for bad clocks and latency
-    CSRF_TOKEN["expiration"] = (CSRF_TOKEN.["expiration"] - 30) + int(time.time())
+    CSRF_TOKEN["expiration"] = (CSRF_TOKEN["expiration"] - 30) + int(time.time())
     return CSRF_TOKEN
 
 
