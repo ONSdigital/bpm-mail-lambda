@@ -1,7 +1,7 @@
 import json
-from datetime import datetime
-from os import getenv
-from time import time
+from datetime import datetime,timezone
+from os import getenv,environ
+import time
 import logging
 import boto3
 import jsonschema
@@ -10,6 +10,9 @@ import bleach
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
+
+environ['TZ'] = "Europe/London"
+time.tzset()
 
 MANIFEST_SCHEMA = {
     "$schema": "http://json-schema.org/draft/2019-09/schema#",
@@ -56,7 +59,7 @@ CSRF_TOKEN = None
 def check_token():
     """Implements TTL-based local caching for BPM CSRF tokens"""
     global CSRF_TOKEN
-    if CSRF_TOKEN is not None and CSRF_TOKEN.expiration < time():
+    if CSRF_TOKEN is not None and CSRF_TOKEN.expiration < time.time():
         return CSRF_TOKEN
     LOGGER.info(f"### CSRF ### Requesting new CSRF token")
     csrf_resp = requests.post(
@@ -70,7 +73,7 @@ def check_token():
         )
     CSRF_TOKEN = csrf_resp.json()
     # Subtracting 30 seconds to allow for bad clocks and latency
-    CSRF_TOKEN.expiration = (CSRF_TOKEN.expiration - 30) + int(time())
+    CSRF_TOKEN.expiration = (CSRF_TOKEN.expiration - 30) + int(time.time())
     return CSRF_TOKEN
 
 
@@ -82,7 +85,7 @@ def lambda_handler(event, context):
        via REST API call.
     """
     global CSRF_TOKEN
-    timestamp = time()
+    timestamp = time.time()
     client = boto3.client("s3")
     s3_event = event["Records"][0]["s3"]
 
@@ -91,9 +94,9 @@ def lambda_handler(event, context):
     LOGGER.info(f"### S3 ### Bucket: {bucket_name}; Object key: {s3_key}")
 
     manifest_txt = client.get_object(Bucket=bucket_name, Key=s3_key)["Body"].read()
-    LOGGER.info(f"### TIME ### Time to retrieve manifest: {time() - timestamp}")
+    LOGGER.info(f"### TIME ### Time to retrieve manifest: {time.time() - timestamp}")
     LOGGER.info(f"### MANIFEST ### Manifest is : {manifest_txt}")
-    timestamp = time()
+    timestamp = time.time()
     if manifest_txt is None:
         raise Exception(
             "Cannot access manifest from S3 bucket: " + s3_event["bucket"]["name"]
@@ -107,7 +110,7 @@ def lambda_handler(event, context):
 
     # We get:  Wed Oct 02 12:34:56 BST 2020
     # We need: ISO-8601 format 'yyyy-MM-dd'T'HH:mm:ssz'
-    date_received = datetime.strptime(manifest["sent"], r"%a %b %d %H:%M:%S %Z %Y")
+    date_received = datetime.fromtimestamp(time.mktime(time.strptime(t, r"%a %b %d %H:%M:%S %Z %Y")), tz=timezone.utc)
     date_converted = date_received.strftime(r"%Y-%m-%dT%H:%M:%S%z")
 
     # Select the attachments object for the email body
@@ -138,9 +141,9 @@ def lambda_handler(event, context):
         ],
     )
     LOGGER.info(
-        f"### TIME ### Time to get email and sanitise html: {time() - timestamp}"
+        f"### TIME ### Time to get email and sanitise html: {time.time() - timestamp}"
     )
-    timestamp = time()
+    timestamp = time.time()
     attachments = [
         att for att in manifest["Attachments"] if att["mailpart"] == "attachment"
     ][0]
@@ -188,8 +191,8 @@ def lambda_handler(event, context):
         raise Exception(
             f"ERROR {task_resp.status_code}: Cannot init new task: {task_resp.text}"
         )
-    LOGGER.info(f"### TIME ### Time to trigger bpm: {time() - timestamp}")
-    timestamp = time()
+    LOGGER.info(f"### TIME ### Time to trigger bpm: {time.time() - timestamp}")
+    timestamp = time.time()
     return {
         "status": task_resp.status_code,
         "body": task_resp.text,
