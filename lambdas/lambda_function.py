@@ -1,6 +1,6 @@
 import json
-from datetime import datetime,timezone
-from os import getenv,environ
+from datetime import datetime, timezone
+from os import getenv, environ
 import time
 import logging
 import boto3
@@ -11,7 +11,7 @@ import bleach
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
 
-environ['TZ'] = "Europe/London"
+environ["TZ"] = "Europe/London"
 time.tzset()
 
 MANIFEST_SCHEMA = {
@@ -110,15 +110,20 @@ def lambda_handler(event, context):
 
     # We get:  Wed Oct 02 12:34:56 BST 2020
     # We need: ISO-8601 format 'yyyy-MM-dd'T'HH:mm:ssz'
-    date_received = datetime.fromtimestamp(time.mktime(time.strptime(manifest['sent'], r"%a %b %d %H:%M:%S %Z %Y")), tz=timezone.utc)
+    date_received = datetime.fromtimestamp(
+        time.mktime(time.strptime(manifest["sent"], r"%a %b %d %H:%M:%S %Z %Y")),
+        tz=timezone.utc,
+    )
     date_converted = date_received.strftime(r"%Y-%m-%dT%H:%M:%S%z")
 
     # Select the attachments object for the email body
     body = [att for att in manifest["Attachments"] if att["mailpart"] == "body"][0]
     # Retrieve email body from S3 bucket
-    email_body = client.get_object(Bucket=bucket_name, Key="email/" + body["filename"])[
-        "Body"
-    ].read().decode()
+    email_body = (
+        client.get_object(Bucket=bucket_name, Key="email/" + body["filename"])["Body"]
+        .read()
+        .decode()
+    )
     email_content = bleach.clean(
         email_body,
         tags=[
@@ -161,7 +166,9 @@ def lambda_handler(event, context):
                 }
             )
 
-    LOGGER.info(f'### EMAIL ### From: {manifest["from"]}, Subject: {manifest["subject"]}')
+    LOGGER.info(
+        f'### EMAIL ### From: {manifest["from"]}, Subject: {manifest["subject"]}'
+    )
     bpm_data = {
         "input": [
             {
@@ -182,7 +189,7 @@ def lambda_handler(event, context):
     CSRF_TOKEN = check_token()
     task_resp = requests.post(
         getenv("BPM_EMAIL_URL"),
-        headers={"BPMCSRFToken": CSRF_TOKEN["csrf_token"]},
+        headers={"IBM-CSRF-TOKEN": CSRF_TOKEN["csrf_token"]},
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
         json=bpm_data,
     )
