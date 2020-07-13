@@ -152,6 +152,9 @@ def lambda_handler(event, context):
         bucket = getenv("ATTACHMENT_BUCKET")
         region = client.get_bucket_location(Bucket=bucket)["LocationConstraint"]
         for attachment in attachments:
+            LOGGER.info(
+                f"Attachment: {attachment}"
+            )
             req_attachments.append(
                 {
                     "url": f"https://s3.{region}.amazonaws.com/{bucket}/{attachment['filename']}",
