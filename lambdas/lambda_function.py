@@ -59,7 +59,7 @@ CSRF_TOKEN = None
 def check_token():
     """Implements TTL-based local caching for BPM CSRF tokens"""
     global CSRF_TOKEN
-    if CSRF_TOKEN is not None and CSRF_TOKEN.expiration < time.time():
+    if CSRF_TOKEN is not None and CSRF_TOKEN["expiration"] < time.time():
         return CSRF_TOKEN
     LOGGER.info(f"### CSRF ### Requesting new CSRF token")
     csrf_resp = requests.post(
@@ -73,7 +73,7 @@ def check_token():
         )
     CSRF_TOKEN = csrf_resp.json()
     # Subtracting 30 seconds to allow for bad clocks and latency
-    CSRF_TOKEN.expiration = (CSRF_TOKEN.expiration - 30) + int(time.time())
+    CSRF_TOKEN["expiration"] = (CSRF_TOKEN.["expiration"] - 30) + int(time.time())
     return CSRF_TOKEN
 
 
