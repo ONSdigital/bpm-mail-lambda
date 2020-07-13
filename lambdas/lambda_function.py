@@ -118,7 +118,7 @@ def lambda_handler(event, context):
     # Retrieve email body from S3 bucket
     email_body = client.get_object(Bucket=bucket_name, Key="email/" + body["filename"])[
         "Body"
-    ].read()
+    ].read().decode()
     email_content = bleach.clean(
         email_body,
         tags=[
