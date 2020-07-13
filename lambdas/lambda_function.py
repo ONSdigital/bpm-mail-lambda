@@ -161,7 +161,7 @@ def lambda_handler(event, context):
                 }
             )
 
-    LOGGER.info(f'### EMAIL ### From: {manifest["from"]}, Subject: {manifest.subject}')
+    LOGGER.info(f'### EMAIL ### From: {manifest["from"]}, Subject: {manifest["subject"]}')
     bpm_data = {
         "input": [
             {
