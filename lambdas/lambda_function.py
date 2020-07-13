@@ -193,7 +193,7 @@ def lambda_handler(event, context):
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
         json=bpm_data,
     )
-
+    LOGGER.info(f"### BPM ### Triggering BPM with: {bpm_data}")
     if task_resp.status_code != 201:
         raise Exception(
             f"ERROR {task_resp.status_code}: Cannot init new task: {task_resp.text}"
