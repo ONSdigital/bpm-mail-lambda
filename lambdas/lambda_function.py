@@ -91,11 +91,11 @@ def lambda_handler(event, context):
 
     bucket_name = s3_event["bucket"]["name"]
     s3_key = s3_event["object"]["key"]
-    LOGGER.info(f"### S3 ### Bucket: {bucket_name}; Object key: {s3_key}")
+    LOGGER.debug(f"### S3 ### Bucket: {bucket_name}; Object key: {s3_key}")
 
     manifest_txt = client.get_object(Bucket=bucket_name, Key=s3_key)["Body"].read()
-    LOGGER.info(f"### TIME ### Time to retrieve manifest: {time.time() - timestamp}")
-    LOGGER.info(f"### MANIFEST ### Manifest is : {manifest_txt}")
+    LOGGER.debug(f"### TIME ### Time to retrieve manifest: {time.time() - timestamp}")
+    LOGGER.debug(f"### MANIFEST ### Manifest is : {manifest_txt}")
     timestamp = time.time()
     if manifest_txt is None:
         raise Exception(
@@ -145,7 +145,7 @@ def lambda_handler(event, context):
             "ul",
         ],
     )
-    LOGGER.info(
+    LOGGER.debug(
         f"### TIME ### Time to get email and sanitise html: {time.time() - timestamp}"
     )
     timestamp = time.time()
@@ -187,19 +187,18 @@ def lambda_handler(event, context):
     }
 
     CSRF_TOKEN = check_token()
-    LOGGER.info(f"### CSRF ### Token: {CSRF_TOKEN['csrf_token']}")
     task_resp = requests.post(
         getenv("BPM_EMAIL_URL"),
         headers={"BPMCSRFToken": CSRF_TOKEN["csrf_token"]},
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
         json=bpm_data,
     )
-    LOGGER.info(f"### BPM ### Triggering BPM with: {bpm_data}")
+    LOGGER.debug(f"### BPM ### Triggering BPM with: {bpm_data}")
     if task_resp.status_code != 201:
         raise Exception(
             f"ERROR {task_resp.status_code}: Cannot init new task: {task_resp.text}"
         )
-    LOGGER.info(f"### TIME ### Time to trigger bpm: {time.time() - timestamp}")
+    LOGGER.debug(f"### TIME ### Time to trigger bpm: {time.time() - timestamp}")
     timestamp = time.time()
     return {
         "status": task_resp.status_code,
