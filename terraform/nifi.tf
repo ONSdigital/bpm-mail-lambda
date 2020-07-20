@@ -29,6 +29,10 @@ resource "aws_iam_user_policy" "nifi" {
 EOF
 }
 
+output "nifi_user" {
+  value = aws_iam_user.nifi.name
+}
+
 output "nifi_key" {
   value = aws_iam_access_key.nifi.secret
 }
