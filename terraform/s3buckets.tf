@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "emails" {
-    bucket = local.emails_bucket
-    policy = <<-POLICY
+  bucket = local.emails_bucket
+  policy = <<-POLICY
     {
         "Version": "2012-10-17",
         "Statement": [
@@ -24,8 +24,8 @@ POLICY
 }
 
 resource "aws_s3_bucket" "attachments" {
-    bucket = local.attachments_bucket
-    policy = <<-POLICY
+  bucket = local.attachments_bucket
+  policy = <<-POLICY
     {
         "Version":"2012-10-17",
         "Statement":[
@@ -42,10 +42,10 @@ POLICY
 }
 
 resource "aws_iam_policy" "email-lambda-s3-policy" {
-    name        = "${terraform.workspace}-emails-s3-lambda"
-    description = "Least privilege permissions for BPM Email ingress lambda"
+  name        = "${terraform.workspace}-emails-s3-lambda"
+  description = "Least privilege permissions for BPM Email ingress lambda"
 
-    policy = <<POLICY
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [

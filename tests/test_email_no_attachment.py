@@ -23,42 +23,23 @@ def s3(aws_credentials):
         yield boto3.client('s3', region_name='us-east-1')
 
 @mock_s3
-def test_email_with_mixed_attachment(s3):
+@pytest.mark.skip(reason="Needs updating to new nifi method")
+def test_load_good_manifest(s3):
     from lambdas.lambda_function import lambda_handler
     s3.create_bucket(Bucket=os.environ['ATTACHMENT_BUCKET'])
     s3.create_bucket(Bucket='email')
-    with open('tests/emails/email-attachments-mixed', 'r') as content_file:
-        content = content_file.read()
-    s3.put_object(Body=content,
-                Bucket='email',
+    with open('tests/json/manifest_ok.json', 'r') as manifest_file:
+        manifest_json = manifest_file.read()
+    s3.put_object(Body=manifest_json,
+                Bucket='manifest',
                 Key='xyz')
     with requests_mock.Mocker() as mock:
         mock.post(os.getenv("BPM_CSRF_URL"), json={"csrf_token": "FAKETOKEN"}, status_code=201)
         mock.post(os.getenv("BPM_EMAIL_URL"), status_code=201)
         assert (lambda_handler({'Records': [
         {'s3': {
-            'bucket': {'name': 'email'},
+            'bucket': {'name': 'manifest'},
             'object': {'key': 'xyz'}
         }}
     ]}, None))['status'] == 201
 
-@mock_s3
-@pytest.mark.skip(reason="Python email library chokes on multipart/related")
-def test_email_with_related_attachment(s3):
-    from lambdas.lambda_function import lambda_handler
-    s3.create_bucket(Bucket=os.environ['ATTACHMENT_BUCKET'])
-    s3.create_bucket(Bucket='email')
-    with open('tests/emails/email-attachments-related', 'r') as content_file:
-        content = content_file.read()
-    s3.put_object(Body=content,
-                Bucket='email',
-                Key='xyz')
-    with requests_mock.Mocker() as mock:
-        mock.post(os.getenv("BPM_CSRF_URL"), json={"csrf_token": "FAKETOKEN"}, status_code=201)
-        mock.post(os.getenv("BPM_EMAIL_URL"), status_code=201)
-        assert (lambda_handler({'Records': [
-        {'s3': {
-            'bucket': {'name': 'email'},
-            'object': {'key': 'xyz'}
-        }}
-    ]}, None))['status'] == 201

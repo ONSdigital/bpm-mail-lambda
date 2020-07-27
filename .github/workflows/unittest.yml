@@ -4,18 +4,18 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.8]
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-verson }}
+      - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
           export PATH=$PATH:/home/runner/.local/bin
