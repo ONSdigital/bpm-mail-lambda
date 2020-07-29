@@ -69,9 +69,9 @@ def check_token():
         Key={"user": {"S": getenv("BPM_USER")}},
         ProjectionExpression="csrf_token, expires",
     )
-    if response:
+    if response and response.get("Item"):
         CSRF_TOKEN = {
-            "expiration": response["Item"]["expires"]["S"],
+            "expiration": int(response["Item"]["expires"]["S"]),
             "csrf_token": response["Item"]["csrf_token"]["S"],
         }
         if CSRF_TOKEN["expiration"] < time.time():
@@ -92,7 +92,7 @@ def check_token():
         TableName=getenv("CSRF_CACHE"),
         Item={
             "user": {"S": getenv("BPM_USER")},
-            "expires": {"S": CSRF_TOKEN["expiration"]},
+            "expires": {"S": str(CSRF_TOKEN["expiration"])},
             "csrf_token": {"S": CSRF_TOKEN["csrf_token"]},
         },
     )
