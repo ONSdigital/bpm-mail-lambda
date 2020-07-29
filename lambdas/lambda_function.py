@@ -60,13 +60,12 @@ def check_token():
     """Implements TTL-based local, remote DynamoDB and fallback caching for BPM CSRF tokens"""
     global CSRF_TOKEN
     now = int(time.time())
-    LOGGER.info(f"### CSRF ### time() is now {time}")
+    LOGGER.info(f"### CSRF ### time() is now {now}")
     if CSRF_TOKEN is not None:
         LOGGER.info(f"### CSRF ### and expiration on local token is {CSRF_TOKEN['expiration']}")
-        if CSRF_TOKEN["expiration"] < now:
+        if CSRF_TOKEN["expiration"] > now:
             return CSRF_TOKEN
-    LOGGER.info(f"### CSRF ### Requesting new CSRF token from Dynamo cache")
-    # Okay, we don't have a valid token, let's try the external cache
+    LOGGER.info(f"### CSRF ### Requesting CSRF token from Dynamo cache")
     client = boto3.client("dynamodb")
     response = client.get_item(
         TableName=getenv("CSRF_CACHE"),
@@ -79,7 +78,7 @@ def check_token():
             "csrf_token": response["Item"]["csrf_token"]["S"],
         }
         LOGGER.info(f"### CSRF ### and expiration on remote cache token is {CSRF_TOKEN['expiration']}")
-        if CSRF_TOKEN["expiration"] < now:
+        if CSRF_TOKEN["expiration"] > now:
             LOGGER.info(f"### CSRF ### Reusing CSRF token from Dynamo cache")
             return CSRF_TOKEN
         LOGGER.info(f"### CSRF ### Cached token expired")
