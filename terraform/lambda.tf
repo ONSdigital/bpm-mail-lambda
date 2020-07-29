@@ -23,6 +23,29 @@ resource "aws_iam_role_policy_attachment" "add_s3" {
   role       = aws_iam_role.email_lambda.name
   policy_arn = aws_iam_policy.email-lambda-s3-policy.arn
 }
+
+resource "aws_iam_role_policy" "CSRFTokenCache" {
+  name   = "${terraform.workspace}-csrf-cache"
+  role   = aws_iam_role.email_lambda.id
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+    "Action": [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem"
+    ],
+    "Effect": "Allow",
+    "Resource": [
+      "${aws_dynamodb_table.CSRFTokenCache.arn}"
+    ]
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_lambda_function" "email" {
   filename         = "../../generated/function.zip"
   source_code_hash = filebase64sha256("../../generated/function.zip")
@@ -39,6 +62,7 @@ resource "aws_lambda_function" "email" {
       BPM_EMAIL_URL     = "https://ons-bawoc.bpm.ibmcloud.com/dba/${var.stage}/bpm/processes?model=Prices%20Correspondence&container=PRICOR"
       BPM_USER          = var.BPM_USER
       BPM_PW            = var.BPM_PW
+      CSRF_CACHE        = aws_dynamodb_table.CSRFTokenCache.name
     }
   }
 }

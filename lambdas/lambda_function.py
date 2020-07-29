@@ -57,11 +57,25 @@ CSRF_TOKEN = None
 
 
 def check_token():
-    """Implements TTL-based local caching for BPM CSRF tokens"""
+    """Implements TTL-based local, remote DynamoDB and fallback caching for BPM CSRF tokens"""
     global CSRF_TOKEN
     if CSRF_TOKEN is not None and CSRF_TOKEN["expiration"] < time.time():
         return CSRF_TOKEN
     LOGGER.info(f"### CSRF ### Requesting new CSRF token")
+    # Okay, we don't have a valid token, let's try the external cache
+    client = boto3.client("dynamodb")
+    response = client.get_item(
+        TableName=getenv("CSRF_CACHE"),
+        Key={"user": {"S": getenv("BPM_USER")}},
+        ProjectionExpression="token, expires",
+    )
+    if response:
+        CSRF_TOKEN = {
+            "expiration": response["Item"]["expires"]["S"],
+            "csrf_token": response["Item"]["token"]["S"],
+        }
+        if CSRF_TOKEN["expiration"] < time.time():
+            return CSRF_TOKEN
     csrf_resp = requests.post(
         getenv("BPM_CSRF_URL"),
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
@@ -74,6 +88,14 @@ def check_token():
     CSRF_TOKEN = csrf_resp.json()
     # Subtracting 30 seconds to allow for bad clocks and latency
     CSRF_TOKEN["expiration"] = (CSRF_TOKEN["expiration"] - 30) + int(time.time())
+    response = client.put_item(
+        TableName=getenv("CSRF_CACHE"),
+        Item={
+            "user": {"S": getenv("BPM_USER")},
+            "expires": {"S": CSRF_TOKEN["expiration"]},
+            "csrf_token": {"S": CSRF_TOKEN["csrf_token"]},
+        },
+    )
     return CSRF_TOKEN
 
 
