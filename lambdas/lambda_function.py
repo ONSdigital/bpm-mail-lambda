@@ -76,7 +76,7 @@ def check_token():
     )
     if response and response.get("Item"):
         CSRF_TOKEN = {
-            "expiration": response["Item"]["expires"]["N"],
+            "expiration": int(response["Item"]["expires"]["N"]),
             "csrf_token": response["Item"]["csrf_token"]["S"],
         }
         LOGGER.debug(
@@ -103,7 +103,7 @@ def check_token():
         TableName=getenv("CSRF_CACHE"),
         Item={
             "user": {"S": getenv("BPM_USER")},
-            "expires": {"N": CSRF_TOKEN["expiration"]},
+            "expires": {"N": str(CSRF_TOKEN["expiration"])},
             "csrf_token": {"S": CSRF_TOKEN["csrf_token"]},
         },
     )
