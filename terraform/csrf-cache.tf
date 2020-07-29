@@ -13,8 +13,8 @@ resource "aws_dynamodb_table" "CSRFTokenCache" {
   }
 
   ttl {
-    attribute_name = "" # Has to be empty or terraform won't update properly
-    enabled        = false
+    attribute_name = "expires"
+    enabled        = true
   }
 
   tags = {
