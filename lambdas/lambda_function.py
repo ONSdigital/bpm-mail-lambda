@@ -232,6 +232,7 @@ def lambda_handler(event, context):
             f"ERROR {task_resp.status_code}: Cannot init new task: {task_resp.text}"
         )
     LOGGER.debug(f"### TIME ### Time to trigger bpm: {time.time() - timestamp}")
+    LOGGER.debug(f"### BPM ### Response: {task_resp.text}")
     timestamp = time.time()
     return {
         "status": task_resp.status_code,

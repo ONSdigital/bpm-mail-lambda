@@ -1,5 +1,9 @@
 resource "aws_s3_bucket" "emails" {
   bucket = local.emails_bucket
+    logging {
+    target_bucket = aws_s3_bucket.logs_bucket.id
+    target_prefix = "log/"
+  }
   policy = <<-POLICY
     {
         "Version": "2012-10-17",
@@ -25,6 +29,10 @@ POLICY
 
 resource "aws_s3_bucket" "attachments" {
   bucket = local.attachments_bucket
+  logging {
+    target_bucket = aws_s3_bucket.logs_bucket.id
+    target_prefix = "log/"
+  }
   policy = <<-POLICY
     {
         "Version":"2012-10-17",
@@ -66,5 +74,17 @@ resource "aws_iam_policy" "email-lambda-s3-policy" {
         }
     ]
 }
+POLICY
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = local.logs_bucket
+  policy = <<-POLICY
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+        
+        ]
+    }
 POLICY
 }

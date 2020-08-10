@@ -3,8 +3,9 @@
 set -euo pipefail
 
 : ${ENVIRONMENT}
+: ${CONCOURSE_ACCOUNT}
 
-pattern="^sandbox|cicd|uat|staging|prod$"
+pattern="^sandbox|dev|cicd|uat|preprod|prod$"
 if [[ ! ${ENVIRONMENT} =~ $pattern ]]; then
     echo "Unknown environment target '${ENVIRONMENT}' - must match '${pattern}'"
     exit 1
@@ -14,7 +15,7 @@ pushd terraform
 rm -rf .terraform/ || true
 rm *.tfstate* || true
 rm role.tf || true
-sed "s/{{environment}}/${ENVIRONMENT}/" role.tf.tmpl > role.tf
+sed "s/{{environment}}/${ENVIRONMENT}/;s/{{concourse_account}}/${CONCOURSE_ACCOUNT}/" role.tf.tmpl > role.tf
 
 tfenv install
 terraform init
