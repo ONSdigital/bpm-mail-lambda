@@ -20,7 +20,7 @@ terraform {
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "deploy-mail-lambda" {
-  name = "bpm-svc-deploy-mail-lambda"
+  name = "prices-svc-deploy-mail-lambda"
   description = "Deployment role to be assumed by concourse deployment user for Mail Lambda deployments"
   assume_role_policy = data.aws_iam_policy_document.instance-assume-role-policy.json
 }
