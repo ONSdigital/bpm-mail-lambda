@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "emails" {
   bucket = local.emails_bucket
     logging {
-    target_bucket = aws_s3_bucket.logs_bucket.id
+    target_bucket = aws_s3_bucket.logs.id
     target_prefix = "log/"
   }
   policy = <<-POLICY
@@ -30,7 +30,7 @@ POLICY
 resource "aws_s3_bucket" "attachments" {
   bucket = local.attachments_bucket
   logging {
-    target_bucket = aws_s3_bucket.logs_bucket.id
+    target_bucket = aws_s3_bucket.logs.id
     target_prefix = "log/"
   }
   policy = <<-POLICY
