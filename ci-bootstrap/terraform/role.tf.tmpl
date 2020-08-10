@@ -72,6 +72,7 @@ data "aws_iam_policy_document" "bpm-deploy-lambda-policy" {
                 "dynamodb:DescribeTimeToLive",
                 "dynamodb:DeleteTable",
                 "dynamodb:UpdateContinuousBackups",
+                "dynamodb:UpdateTimeToLive",
                 "lambda:UpdateFunctionConfiguration",
                 "lambda:UpdateFunctionCode",
                 "lambda:UpdateAlias",
