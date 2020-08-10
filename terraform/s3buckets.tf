@@ -79,12 +79,4 @@ POLICY
 
 resource "aws_s3_bucket" "logs" {
   bucket = local.logs_bucket
-  policy = <<-POLICY
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-        
-        ]
-    }
-POLICY
 }
