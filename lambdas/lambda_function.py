@@ -34,7 +34,6 @@ MANIFEST_SCHEMA = {
                         "orig.attach.name": {"type": "string"},
                         "attach.file.type": {"type": "string"},
                         "sizeBytes": {"type": "string"},
-                        "body.mime.type": {"type": "string"},
                     },
                     "required": [
                         "filename",
@@ -42,7 +41,6 @@ MANIFEST_SCHEMA = {
                         "orig.attach.name",
                         "attach.file.type",
                         "sizeBytes",
-                        "body.mime.type",
                     ],
                     "additionalProperties": False,
                 }
