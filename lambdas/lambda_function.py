@@ -212,7 +212,7 @@ def lambda_handler(event, context):
                     "dateReceived": date_converted,
                     "subject": manifest["subject"],
                     "body": email_content,
-                    "contentType": body["body.mime.type"],
+                    "contentType": manifest["emailmimetype"],
                     "attachments": req_attachments,
                 },
             }
