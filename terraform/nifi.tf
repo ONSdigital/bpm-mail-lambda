@@ -34,5 +34,9 @@ output "nifi_user" {
 }
 
 output "nifi_key" {
+  value = aws_iam_access_key.nifi.id
+}
+
+output "nifi_secret_key" {
   value = aws_iam_access_key.nifi.secret
 }
