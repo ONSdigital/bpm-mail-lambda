@@ -13,6 +13,13 @@ set -euo pipefail
 . ./bpm-mail-lambda/ci/tasks/util/assume_role.sh
 . ./bpm-mail-lambda/ci/tasks/util/setup_terraform.sh
 
+# Generate fake deployment file to satisfy hash function
+# in terraform
+pushd ../../
+mkdir generated
+touch generated/function.zip
+popd
+
 terraform destroy --auto-approve
 
 echo "done"
