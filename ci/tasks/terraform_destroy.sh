@@ -13,6 +13,11 @@ set -euo pipefail
 . ./bpm-mail-lambda/ci/tasks/util/assume_role.sh
 . ./bpm-mail-lambda/ci/tasks/util/setup_terraform.sh
 
+pushd ../../
+mkdir generated
+touch generated/function.zip
+popd
+
 terraform destroy --auto-approve
 
 echo "done"

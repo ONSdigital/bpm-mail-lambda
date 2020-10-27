@@ -57,11 +57,36 @@ CSRF_TOKEN = None
 
 
 def check_token():
-    """Implements TTL-based local caching for BPM CSRF tokens"""
+    """Implements TTL-based local, remote DynamoDB and fallback caching for BPM CSRF tokens"""
     global CSRF_TOKEN
-    if CSRF_TOKEN is not None and CSRF_TOKEN["expiration"] < time.time():
-        return CSRF_TOKEN
-    LOGGER.info(f"### CSRF ### Requesting new CSRF token")
+    now = int(time.time())
+    LOGGER.debug(f"### CSRF ### time() is now {now}")
+    if CSRF_TOKEN is not None:
+        LOGGER.debug(
+            f"### CSRF ### and expiration on local token is {CSRF_TOKEN['expiration']}"
+        )
+        if CSRF_TOKEN["expiration"] > now:
+            return CSRF_TOKEN
+    LOGGER.debug(f"### CSRF ### Requesting CSRF token from Dynamo cache")
+    client = boto3.client("dynamodb")
+    response = client.get_item(
+        TableName=getenv("CSRF_CACHE"),
+        Key={"user": {"S": getenv("BPM_USER")}},
+        ProjectionExpression="csrf_token, expires",
+    )
+    if response and response.get("Item"):
+        CSRF_TOKEN = {
+            "expiration": int(response["Item"]["expires"]["N"]),
+            "csrf_token": response["Item"]["csrf_token"]["S"],
+        }
+        LOGGER.debug(
+            f"### CSRF ### and expiration on remote cache token is {CSRF_TOKEN['expiration']}"
+        )
+        if CSRF_TOKEN["expiration"] > now:
+            LOGGER.debug(f"### CSRF ### Reusing CSRF token from Dynamo cache")
+            return CSRF_TOKEN
+        LOGGER.debug(f"### CSRF ### Cached token expired")
+    LOGGER.debug(f"### CSRF ### Requesting new CSRF token from IBM")
     csrf_resp = requests.post(
         getenv("BPM_CSRF_URL"),
         auth=(getenv("BPM_USER"), getenv("BPM_PW")),
@@ -73,7 +98,15 @@ def check_token():
         )
     CSRF_TOKEN = csrf_resp.json()
     # Subtracting 30 seconds to allow for bad clocks and latency
-    CSRF_TOKEN["expiration"] = (CSRF_TOKEN["expiration"] - 30) + int(time.time())
+    CSRF_TOKEN["expiration"] = (CSRF_TOKEN["expiration"] - 30) + now
+    response = client.put_item(
+        TableName=getenv("CSRF_CACHE"),
+        Item={
+            "user": {"S": getenv("BPM_USER")},
+            "expires": {"N": str(CSRF_TOKEN["expiration"])},
+            "csrf_token": {"S": CSRF_TOKEN["csrf_token"]},
+        },
+    )
     return CSRF_TOKEN
 
 
