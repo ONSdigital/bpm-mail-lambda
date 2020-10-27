@@ -15,7 +15,7 @@ set -euo pipefail
 
 pushd ../../
 mkdir generated
-touch generated/function.zip.zip
+touch generated/function.zip
 popd
 
 terraform destroy --auto-approve
