@@ -100,7 +100,8 @@ data "aws_iam_policy_document" "bpm-deploy-lambda-policy" {
                 "iam:CreatePolicy",
                 "iam:AttachRolePolicy",
                 "iam:DeleteUserPolicy",
-                "iam:DeleteAccessKey"
+                "iam:DeleteAccessKey",
+                "iam:DeletePolicyVersion"
               ]
     resources = [
       "*"
