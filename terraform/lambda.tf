@@ -58,8 +58,8 @@ resource "aws_lambda_function" "email" {
   environment {
     variables = {
       ATTACHMENT_BUCKET = local.attachments_bucket
-      BPM_CSRF_URL      = "https://ons-bawoc.bpm.ibmcloud.com/dba/${var.stage}/bpm/system/login"
-      BPM_EMAIL_URL     = "https://ons-bawoc.bpm.ibmcloud.com/dba/${var.stage}/bpm/processes?model=Prices%20Correspondence&container=PRICOR"
+      BPM_CSRF_URL      = "https://ons-bawoc.bpm.ibmcloud.com/dba/${local.bpm_env}/bpm/system/login"
+      BPM_EMAIL_URL     = "https://ons-bawoc.bpm.ibmcloud.com/dba/${local.bpm_env}/bpm/processes?model=Prices%20Correspondence&container=PRICOR"
       BPM_USER          = var.BPM_USER
       BPM_PW            = var.BPM_PW
       CSRF_CACHE        = aws_dynamodb_table.CSRFTokenCache.name
