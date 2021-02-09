@@ -8,7 +8,7 @@ variable "domain" {
   default = "bpm.ons.digital"
 }
 
-variable "stage" {
+variable "environment" {
   type = string
 }
 

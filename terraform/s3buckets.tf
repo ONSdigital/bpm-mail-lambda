@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "emails" {
   bucket = local.emails_bucket
   logging {
-    target_bucket = "ons-${terraform.workspace}-${var.stage}-s3-access"
+    target_bucket = "ons-${terraform.workspace}-${var.environment}-s3-access"
     target_prefix = local.emails_bucket
   }
   policy = <<-POLICY
@@ -30,7 +30,7 @@ POLICY
 resource "aws_s3_bucket" "attachments" {
   bucket = local.attachments_bucket
   logging {
-    target_bucket = "ons-${terraform.workspace}-${var.stage}-s3-access"
+    target_bucket = "ons-${terraform.workspace}-${var.environment}-s3-access"
     target_prefix = local.emails_bucket
   }
   policy = <<-POLICY

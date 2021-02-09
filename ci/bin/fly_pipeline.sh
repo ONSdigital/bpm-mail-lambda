@@ -1,27 +1,21 @@
 #!/bin/bash
 
 # Sets up a new deployment pipeline
-# Make sure to set the correct environment variable (sandbox, cicd, staging or prod)
+# Make sure to set the correct environment variable (dev, preprod or prod)
 
 set -euo pipefail
 
-: $WORKSPACE
+: $BRANCH
 : $ENVIRONMENT
-: $STAGE
 : ${AWS_REGION:="eu-west-2"}
 : ${HTTP_PROXY:="localhost:8118"}
-: ${BRANCH:="master"}
 : ${TARGET:=gcp}
 : ${FLY:=fly -t ${TARGET}}
 : ${EXTRA_OPTIONS:=""}
 
-if [[ ${WORKSPACE} =~ - ]]; then
-    echo "Terraform workspace '${WORKSPACE}' cannot contain '-' (breaks some resource names)"
-    exit 1
-fi
-
 export HTTP_PROXY=${HTTP_PROXY}
 
+WORKSPACE=`echo "${BRANCH:0:13}" | sed 's/[^a-zA-Z0-9]/-/g' | tr '[:upper:]' '[:lower:]'`
 pipeline="${ENVIRONMENT}-${WORKSPACE}-deploy-emails-lambda"
 
 ${FLY} set-pipeline \
@@ -30,7 +24,6 @@ ${FLY} set-pipeline \
     -v "workspace=${WORKSPACE}" \
     -v "aws_region=${AWS_REGION}" \
     -v "environment=${ENVIRONMENT}" \
-    -v "stage=${STAGE}" \
     -v "branch=${BRANCH}" \
     ${EXTRA_OPTIONS}
 
