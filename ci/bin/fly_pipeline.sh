@@ -7,6 +7,7 @@ set -euo pipefail
 
 : $BRANCH
 : $ENVIRONMENT
+: $STAGE
 : ${AWS_REGION:="eu-west-2"}
 : ${HTTP_PROXY:="localhost:8118"}
 : ${TARGET:=gcp}
@@ -25,6 +26,8 @@ ${FLY} set-pipeline \
     -v "aws_region=${AWS_REGION}" \
     -v "environment=${ENVIRONMENT}" \
     -v "branch=${BRANCH}" \
+    -v "stage=${STAGE}" \
+    -v "app=${APP}" \
     ${EXTRA_OPTIONS}
 
 ${FLY} unpause-pipeline \

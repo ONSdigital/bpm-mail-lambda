@@ -1,14 +1,14 @@
 # COMMON ========================================
 
-aws_secret_access_key: &aws_secret_access_key ((prices.service_account_access_key_secret))
-aws_access_key_id: &aws_access_key_id ((prices.service_account_access_key_id))
+aws_secret_access_key: &aws_secret_access_key ((aws-((app)).service_account_access_key_secret))
+aws_access_key_id: &aws_access_key_id ((aws-((app)).service_account_access_key_id))
 
 aws_params: &aws_params
   AWS_ACCESS_KEY_ID: *aws_access_key_id
   AWS_SECRET_ACCESS_KEY: *aws_secret_access_key
   AWS_REGION: ((aws_region))
-  AWS_SERVICE_ROLE: arn:aws:iam::((prices.account_((environment)))):role/prices-svc-deploy-mail-lambda
-  S3_NAME: ((environment)).((prices.tf_state_s3))
+  AWS_SERVICE_ROLE: arn:aws:iam::((aws-((app)).account_((environment)))):role/((app))-svc-deploy-mail-lambda
+  S3_NAME: ((environment)).((aws-((app)).tf_state_s3))
   S3_KEY: mail-receiver/lambda.tfstate
 
 tf_params: &tf_params
@@ -16,8 +16,9 @@ tf_params: &tf_params
   WORKSPACE: ((workspace))
   TERRAFORM_SOURCE: bpm-mail-lambda/terraform
   TF_VAR_stage: ((stage))
-  TF_VAR_BPM_USER: ((prices.((environment))_bpm_user))
-  TF_VAR_BPM_PW: ((prices.((environment))_bpm_pw))
+  TF_VAR_environment: ((environment))
+  TF_VAR_BPM_USER: ((pricormaillambda.bpm_user_((environment))))
+  TF_VAR_BPM_PW: ((pricormaillambda.bpm_pw_((environment))))
 
 github_pull_creds: &github_pull_creds
   username: ((github.access_token))
